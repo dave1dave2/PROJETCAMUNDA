@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="Definitions_17cy245" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:collaboration id="Collaboration_0glcdbr">
+    <bpmn:participant id="Participant_1f3mlw0" name="DEMANDE DE CONGES" processRef="conges" />
+  </bpmn:collaboration>
+  <bpmn:process id="conges" name="conges" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1j069v4">
+      <bpmn:lane id="Lane_0l76p3b" name="EMPLOYE">
+        <bpmn:flowNodeRef>Activity_1ip7sya</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1b8pbh2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1nr9psh</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1junnbg</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_11o130o</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_05ksogf</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>InitierDemande</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_01yhp88" name="EMPLOYEUR OU RESPONSABLE">
+        <bpmn:flowNodeRef>Activity_1i7kfh4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0kvc5vs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>APPROUVE</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1094s0z</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0tbyjd8</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_07x2kt1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:userTask id="Activity_1ip7sya" name="FORMULAIRE DE DEMANDE DE CONGE" camunda:assignee="ac">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="nom" label="NOM DU DEMANDEUR" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+              <camunda:constraint name="maxlength" config="25" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="prenom" label="PRENOMS DU DEMANDEURS :" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+              <camunda:constraint name="maxlength" config="100" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="service" label="VOTRE SERVICE" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" config="50" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="jours" label="NOMBRE DE JOURS DEMANDES :" type="long" />
+          <camunda:formField id="DateDepart" label="DATE DE DEPART :" type="string" />
+          <camunda:formField id="poste" label="POSTE DU DEMANDEUR" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0dz8m7r</bpmn:incoming>
+      <bpmn:outgoing>Flow_1hm1nqs</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_1b8pbh2" name="VALIDATION AUTOMATIQUE">
+      <bpmn:incoming>Flow_1hm1nqs</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xb3s8b</bpmn:outgoing>
+      <bpmn:outgoing>Flow_05zhuri</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0yrm6l6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_1nr9psh" name="ERREUR">
+      <bpmn:incoming>Flow_18mrf3t</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sendTask id="Activity_1junnbg" name="MESSAGE D&#39;ERREUR" camunda:type="external" camunda:topic="messageErreur">
+      <bpmn:incoming>Flow_05zhuri</bpmn:incoming>
+      <bpmn:outgoing>Flow_18mrf3t</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="Activity_1i7kfh4" name="DEMANDE DE CONGES" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="nom" label="NOM DE  FAMILLE :" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="prenom" label="PRENOMS DE L&#39;EMPLOYE" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="poste" label="POSTE DE L&#39;EMPLOYE" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="service" label="DEPARTEMENT OU SERVICE" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="DateDepart" label="DATE DE DEPART :" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="jours" label="NOMBRE DE JOURS DEMANDES :" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="decision" label="ACCEPTER" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0xb3s8b</bpmn:incoming>
+      <bpmn:outgoing>Flow_19rf2mr</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_0kvc5vs" name="VALIDATION DE CONGE">
+      <bpmn:incoming>Flow_19rf2mr</bpmn:incoming>
+      <bpmn:outgoing>Flow_03w8w62</bpmn:outgoing>
+      <bpmn:outgoing>Flow_186zo4t</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="APPROUVE" name="DEMANDE APPROUVE" camunda:type="external" camunda:topic="approuve">
+      <bpmn:incoming>Flow_03w8w62</bpmn:incoming>
+      <bpmn:outgoing>Flow_1udk4sa</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1094s0z" name="CONGES ACCORDES">
+      <bpmn:incoming>Flow_1udk4sa</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sendTask id="Activity_11o130o" name="MESSAGE DINFORMATION" camunda:type="external" camunda:topic="messageRej">
+      <bpmn:incoming>Flow_0yrm6l6</bpmn:incoming>
+      <bpmn:outgoing>Flow_0a8zmsj</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="Event_05ksogf" name="CONGES REJETES">
+      <bpmn:incoming>Flow_0a8zmsj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sendTask id="Activity_0tbyjd8" name="DEMANDE REFUSEE" camunda:type="external" camunda:topic="messageRefus">
+      <bpmn:documentation>LE DRH EST EN CONGE VEUILLEZ REFAIRE LA DEMANDE DANS 2 SEMAINES</bpmn:documentation>
+      <bpmn:incoming>Flow_186zo4t</bpmn:incoming>
+      <bpmn:outgoing>Flow_01laa1p</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="Event_07x2kt1" name="CONGES REFUSE">
+      <bpmn:incoming>Flow_01laa1p</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_18mrf3t" sourceRef="Activity_1junnbg" targetRef="Event_1nr9psh" />
+    <bpmn:sequenceFlow id="Flow_05zhuri" name="NUL OU NEGATIF" sourceRef="Gateway_1b8pbh2" targetRef="Activity_1junnbg">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${jours&lt;=0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_01laa1p" sourceRef="Activity_0tbyjd8" targetRef="Event_07x2kt1" />
+    <bpmn:sequenceFlow id="Flow_0xb3s8b" name="&#60;=14 JOURS" sourceRef="Gateway_1b8pbh2" targetRef="Activity_1i7kfh4">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(jours&lt;=14)&amp;&amp;(jours&gt;0)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_186zo4t" name="NON" sourceRef="Gateway_0kvc5vs" targetRef="Activity_0tbyjd8">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!decision}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_03w8w62" name="OUI" sourceRef="Gateway_0kvc5vs" targetRef="APPROUVE">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decision}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1udk4sa" sourceRef="APPROUVE" targetRef="Event_1094s0z" />
+    <bpmn:sequenceFlow id="Flow_19rf2mr" sourceRef="Activity_1i7kfh4" targetRef="Gateway_0kvc5vs" />
+    <bpmn:sequenceFlow id="Flow_0dz8m7r" sourceRef="InitierDemande" targetRef="Activity_1ip7sya" />
+    <bpmn:sequenceFlow id="Flow_0yrm6l6" name="&#62;14 JOURS" sourceRef="Gateway_1b8pbh2" targetRef="Activity_11o130o">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${jours&gt;14}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0a8zmsj" sourceRef="Activity_11o130o" targetRef="Event_05ksogf" />
+    <bpmn:sequenceFlow id="Flow_1hm1nqs" sourceRef="Activity_1ip7sya" targetRef="Gateway_1b8pbh2" />
+    <bpmn:startEvent id="InitierDemande" name="DEMANDE DE CONGES">
+      <bpmn:outgoing>Flow_0dz8m7r</bpmn:outgoing>
+    </bpmn:startEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0glcdbr">
+      <bpmndi:BPMNShape id="Participant_1f3mlw0_di" bpmnElement="Participant_1f3mlw0" isHorizontal="true" bioc:stroke="rgb(251, 140, 0)" bioc:fill="rgb(255, 224, 178)">
+        <dc:Bounds x="160" y="80" width="800" height="450" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_01yhp88_di" bpmnElement="Lane_01yhp88" isHorizontal="true">
+        <dc:Bounds x="190" y="310" width="770" height="220" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0l76p3b_di" bpmnElement="Lane_0l76p3b" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="770" height="230" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1hm1nqs_di" bpmnElement="Flow_1hm1nqs">
+        <di:waypoint x="470" y="230" />
+        <di:waypoint x="505" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0a8zmsj_di" bpmnElement="Flow_0a8zmsj">
+        <di:waypoint x="770" y="140" />
+        <di:waypoint x="862" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yrm6l6_di" bpmnElement="Flow_0yrm6l6">
+        <di:waypoint x="530" y="205" />
+        <di:waypoint x="530" y="140" />
+        <di:waypoint x="670" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="548" y="123" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dz8m7r_di" bpmnElement="Flow_0dz8m7r" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <di:waypoint x="288" y="230" />
+        <di:waypoint x="370" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19rf2mr_di" bpmnElement="Flow_19rf2mr" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <di:waypoint x="420" y="400" />
+        <di:waypoint x="535" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1udk4sa_di" bpmnElement="Flow_1udk4sa" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <di:waypoint x="840" y="350" />
+        <di:waypoint x="902" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03w8w62_di" bpmnElement="Flow_03w8w62" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <di:waypoint x="560" y="375" />
+        <di:waypoint x="560" y="350" />
+        <di:waypoint x="740" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="564" y="347" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_186zo4t_di" bpmnElement="Flow_186zo4t" bioc:stroke="rgb(229, 57, 53)" bioc:fill="rgb(255, 205, 210)">
+        <di:waypoint x="560" y="425" />
+        <di:waypoint x="560" y="470" />
+        <di:waypoint x="740" y="470" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="568" y="427" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xb3s8b_di" bpmnElement="Flow_0xb3s8b" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <di:waypoint x="530" y="255" />
+        <di:waypoint x="530" y="290" />
+        <di:waypoint x="380" y="290" />
+        <di:waypoint x="380" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="447" y="273" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01laa1p_di" bpmnElement="Flow_01laa1p" bioc:stroke="rgb(229, 57, 53)" bioc:fill="rgb(255, 205, 210)">
+        <di:waypoint x="840" y="470" />
+        <di:waypoint x="902" y="470" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05zhuri_di" bpmnElement="Flow_05zhuri" bioc:stroke="rgb(229, 57, 53)" bioc:fill="rgb(255, 205, 210)">
+        <di:waypoint x="555" y="230" />
+        <di:waypoint x="670" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="576" y="186" width="48" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18mrf3t_di" bpmnElement="Flow_18mrf3t" bioc:stroke="rgb(229, 57, 53)" bioc:fill="rgb(255, 205, 210)">
+        <di:waypoint x="770" y="230" />
+        <di:waypoint x="852" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0r4v48b_di" bpmnElement="Activity_1ip7sya">
+        <dc:Bounds x="370" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1b8pbh2_di" bpmnElement="Gateway_1b8pbh2" isMarkerVisible="true" bioc:stroke="rgb(30, 136, 229)" bioc:fill="rgb(187, 222, 251)">
+        <dc:Bounds x="505" y="205" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="538" y="255" width="80" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1nr9psh_di" bpmnElement="Event_1nr9psh" bioc:stroke="rgb(229, 57, 53)" bioc:fill="rgb(255, 205, 210)">
+        <dc:Bounds x="852" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="846" y="258" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0a0smyl_di" bpmnElement="Activity_1junnbg" bioc:stroke="rgb(142, 36, 170)" bioc:fill="rgb(225, 190, 231)">
+        <dc:Bounds x="670" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19ruyxc_di" bpmnElement="Activity_1i7kfh4" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <dc:Bounds x="320" y="350" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0kvc5vs_di" bpmnElement="Gateway_0kvc5vs" isMarkerVisible="true" bioc:stroke="rgb(30, 136, 229)" bioc:fill="rgb(187, 222, 251)">
+        <dc:Bounds x="535" y="375" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="595" y="386.5" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05kv40h_di" bpmnElement="APPROUVE" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <dc:Bounds x="740" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1094s0z_di" bpmnElement="Event_1094s0z" bioc:stroke="black" bioc:fill="white">
+        <dc:Bounds x="902" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="889" y="375" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11sxpl1_di" bpmnElement="Activity_11o130o" bioc:stroke="rgb(142, 36, 170)" bioc:fill="rgb(225, 190, 231)">
+        <dc:Bounds x="670" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_05ksogf_di" bpmnElement="Event_05ksogf" bioc:stroke="rgb(229, 57, 53)" bioc:fill="rgb(255, 205, 210)">
+        <dc:Bounds x="862" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="844" y="176" width="51" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0z9km6w_di" bpmnElement="Activity_0tbyjd8" bioc:stroke="rgb(142, 36, 170)" bioc:fill="rgb(225, 190, 231)">
+        <dc:Bounds x="740" y="430" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07x2kt1_di" bpmnElement="Event_07x2kt1" bioc:stroke="rgb(229, 57, 53)" bioc:fill="rgb(255, 205, 210)">
+        <dc:Bounds x="902" y="452" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="896" y="495" width="49" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="InitierDemande" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <dc:Bounds x="252" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="232" y="256" width="75" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
